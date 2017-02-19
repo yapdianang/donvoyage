@@ -1,16 +1,80 @@
 <html>
   <head>
     <style>
-    * { margin: 0; padding: 0; }
+    * { margin: 0; padding: 0; } .checkbox { cursor: pointer; }
+
+    @font-face {
+        font-family: 'Montserrat';
+        src: url(Montserrat-Black.ttf);
+        font-weight: 600;
+    }
+
+    @font-face {
+        font-family: 'Montserrat';
+        src: url(Montserrat-Regular.ttf);
+        font-weight: 300;
+    }
+
     </style>
   </head>
   <body style="background-color: #0052A5;">
 
     <div id="geochart-colors" style="width: 800px; height: 600px; position: absolute; left: 50%; top: 50px; margin-left: -400px;"></div>
 
+    <script>
+      var options; // global variable
+      var btnText = ["red", "white"];
+
+      var label_options = [['Country', 'Refugee Ban'], ['Country', '# Businesses'], ['Country', 'Anger'], ['Country', 'Angry Tweets'], ['Country', 'Data']];
+
+      var country_options = [ [['Libya', 16], ['Sudan', 16], ['Syria', 16], ['Iraq', 16], ['Iran', 16], ['Yemen', 16], ['Somalia', 16]], [['India', 16], ['Indonesia', 16], ['Canada', 14], ['UAE', 12], ['United Kingdom', 10], ['China', 9], ['Brazil', 8], ['Panama', 8], ['Saudi Arabia', 8], ['French West Indies', 8], ['Azerbaijan', 6], ['St. Vincent and the Grenadines', 4], ['Ireland', 4], ['Israel', 4], ['Qatar', 4], ['Dominican Republic', 3], ['Egypt', 2], ['Georgia', 2], ['Mexico', 2], ['Philippines', 2], ['South Africa', 2], ['Turkey', 2], ['Uruguay', 2], ['Bermuda', 1], ['Argentina', 1]], [['Pakistan',15.0],['Czech Republic',15.0],['Mexico',8.0],['Egypt',8.0],['India',13.0],['North Korea',9.0],['Tanzania',9.0],['Greece',1.0],['Japan',7.0],['Afghanistan',14.0],['Saudi Arabia',16.0],['Kuwait',6.0],['France',7.0],['South Korea',16.0],['Israel',8.0],['Iran',8.0],['Cuba',15.0],['Germany',11.0],['Iraq',9.0],['Kenya',9.0],['Ukraine',7.0],['Libya',11.0],['Denmark',1.0],['Poland',15.0],['Vietnam',1.0],['Mali',16.0],['Jordan',0.0],['China',3.0],['Russia',9.0]], [['Pakistan',16.0],['Samoa',2.0],['Myanmar',1.0],['Mexico',5.0],['India',5.0],['North Korea',8.0],['Japan',5.0],['Taiwan',8.0],['New Zealand',16.0],['Canada',0.0],['Saudi Arabia',16.0],['Italy',1.0],['Bangladesh',16.0],['Mauritania',12.0],['Sudan',0.0],['France',16.0],['Somalia',0.0],['Ireland',0.0],['Venezuela',6.0],['Turkey',16.0],['Israel',10.0],['Australia',11.0],['Iran',9.0],['Cuba',6.0],['China',11.0],['Haiti',16.0],['Iraq',14.0],['Ukraine',7.0],['Georgia',0.0],['Libya',13.0],['Oman',7.0],['Philippines',1.0],['Brazil',16.0],['Morocco',7.0],['Vietnam',7.0],['Mali',11.0],['Switzerland',16.0],['Germany',12.0],['Yemen',0.0],['Russia',12.0],['Jersey',0.0]] ];
+
+      function checkSelected(id) {
+        return document.getElementById("opt" + id).style.color == btnText[0];
+      }
+
+      function isSelected(btn) {
+        if(btn.style.color == btnText[0]) {
+          btn.style.color = btnText[1];
+          btn.style.fontWeight = "300"; // regular
+        } else {
+          btn.style.color = btnText[0];
+          btn.style.fontWeight = "600"; // bold
+        }
+        
+        var countries = [];
+        for(var i = 1; i <= 4; i++) {
+          if(checkSelected(i)) {
+            countries = countries.concat(country_options[i-1]);
+          }
+        }
+
+        var labels = [];
+        if(checkSelected(1) && !checkSelected(2) && !checkSelected(3) && !checkSelected(4)) labels = [label_options[0]];
+        else if(checkSelected(2) && !checkSelected(1) && !checkSelected(3) && !checkSelected(4)) labels = [label_options[1]];
+        else if(checkSelected(3) && !checkSelected(2) && !checkSelected(1) && !checkSelected(4)) labels = [label_options[2]];
+        else if(checkSelected(4) && !checkSelected(2) && !checkSelected(3) && !checkSelected(1)) labels = [label_options[3]];
+        else labels = [label_options[4]];
+
+        labels = labels.concat([['United States', 100]]);
+        labels = labels.concat(countries);
+
+        var data = google.visualization.arrayToDataTable(labels);
+        chart.draw(data, options);
+
+      }
+    </script>
+
+    <div id='opt1' style="color: white; font-weight: 300; font-family: 'Helvetica Neue'; position: absolute; left: 75px; top: 50px;" class="checkbox" onclick="isSelected(this)">Banned Countries</div>
+    <div id='opt2' style="color: white; font-weight: 300; font-family: 'Helvetica Neue'; position: absolute; left: 75px; top: 100px;" class="checkbox" onclick="isSelected(this)">Business Involvement</div>
+    <div id='opt3' style="color: white; font-weight: 300; font-family: 'Helvetica Neue'; position: absolute; left: 75px; top: 75px;" class="checkbox" onclick="isSelected(this)">Foreign Policy</div>
+    <div id='opt4' style="color: white; font-weight: 300; font-family: 'Helvetica Neue'; position: absolute; left: 75px; top: 125px;" class="checkbox" onclick="isSelected(this)">Tweets</div>
+
     <img src="plane.png" width="100" style="position: absolute; left: 50%; top: 25px; margin-left: -250px;"/>
+    <img src="don.png" width="50" style="position: absolute; left: 50%; top: 40px; margin-left: -120px;"/>
     <div style="color: white; text-transform: uppercase; width: 600px; position: absolute; left: 50%; top: 25px; margin-left: -300px; text-align: center; font-family: 'Montserrat'; font-size: 40px;">Don' Voyage</div>
     
+
     <!-- You <span style="font-weight: 600;">can</span> leave on a flight <span style="color: white; font-weight: 600;">tomorrow</span> to <span style="font-weight: 600; color: #DAA520;">Mexico</span> for <span style="font-weight: 600; color: white;">$480.32</span> US dollars! -->
     <div id="price" style="color: rgb(200, 200, 200); width: 100%; position: absolute; bottom: 0px; text-align: center; font-family: 'Helvetica Neue'; font-weight: 300; font-size: 20px; background-color: black; line-height: 50px;">Click on a country to try flying there.</div>
   
@@ -22,12 +86,13 @@
 
       function drawRegionsMap() {
         var data = google.visualization.arrayToDataTable([
-          //['Country', 'Avoid'], ['United States', 100], ['Libya', 16], ['Sudan', 16], ['Syria', 16], ['Iraq', 16], ['Iran', 16], ['Yemen', 16], ['Somalia', 16]
-          ['Country', 'Businesses'], ['United States', 100], ['India', 16], ['Indonesia', 16], ['Canada', 14], ['UAE', 12], ['United Kingdom', 10], ['China', 9], ['Brazil', 8], ['Panama', 8], ['Saudi Arabia', 8], ['French West Indies', 8], ['Azerbaijan', 6], ['St. Vincent and the Grenadines', 4], ['Ireland', 4], ['Israel', 4], ['Qatar', 4], ['Dominican Republic', 3], ['Egypt', 2], ['Georgia', 2], ['Mexico', 2], ['Philippines', 2], ['South Africa', 2], ['Turkey', 2], ['Uruguay', 2], ['Bermuda', 1], ['Argentina', 1]
+          
+          ['Country', 'Data'], ['United States', '100']
+
         ]);
 
-        var options = {
-          colorAxis: {values: [0, 16, 100], colors: ['#F0D6DB', '#E0162B', 'rgb(0, 200, 0)'],},
+        options = {
+          colorAxis: {values: [0, 16, 100], colors: ['#F0D6DB', '#E0162B', 'rgb(0, 200, 0)']},
           backgroundColor: '#0052A5',
           datalessRegionColor: 'white',
           defaultColor: '#f5f5f5',
@@ -76,15 +141,20 @@
                       break;
                     }
                   }
+                } else if(xhr2.readyState == 4) {
+                    document.getElementById("price").innerHTML = "No flights found, try another country :(";
                 }
               }
               xhr2.send();
+            } else if(xhr.readyState == 4) {
+                document.getElementById("price").innerHTML = "No flights found, try another country :(";
             }
           }
           xhr.send();
         }
 
 
+        isSelected(document.getElementById("opt1"));
       }
 
     </script>
