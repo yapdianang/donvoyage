@@ -29,7 +29,7 @@
       }
     }
 
-      var options; // global variable
+      var options, data; // global variable
       var btnText = ["red", "white"];
 
       var label_options = [['Country', 'Refugee Ban'], ['Country', '# Businesses'], ['Country', 'Anger'], ['Country', 'Angry Tweets'], ['Country', 'Data']];
@@ -104,7 +104,7 @@
         labels = labels.concat([['United States', 100]]);
         labels = labels.concat(countries);
 
-        var data = google.visualization.arrayToDataTable(labels);
+        data = google.visualization.arrayToDataTable(labels);
         chart.draw(data, options);
 
       }
@@ -119,6 +119,14 @@
     <img src="don.png" width="50" style="position: absolute; left: 50%; top: 40px; margin-left: -120px;"/>
     <div style="color: white; text-transform: uppercase; width: 600px; position: absolute; left: 50%; top: 25px; margin-left: -300px; text-align: center; font-family: 'Montserrat'; font-size: 40px;">Don' Voyage</div>
     
+    <div id="fInfoContainer" style="display: none; position: absolute; width: 160px; padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px; background-color: #4286F4; top: 200px; left: 50px;">
+      <div style="color: white; font-family: 'Montserrat'; text-align: left; width: 100%; border-bottom: 1px solid white;">Flight Information</div>
+      <div style="font-size: 15px; color: white; font-family: 'Helvetica Neue'; margin-top: 10px;">Country: <span style="color: #DAA520;" id="cname"></span></div>
+      <div style="font-size: 15px; color: rgb(180, 180, 180); font-family: 'Helvetica Neue'; margin-top: 10px;" id="pname">Price: </div>
+      <div style="font-size: 14px; color: white; font-family: 'Helvetica Neue'; margin-top: 20px;" id="firstFlight"></div>
+      <div id="additionalFlights"></div>
+      <div style="font-size: 14px; color: white; background-color: #0052A5; font-family: 'Helvetica Neue'; padding: 15px; width: calc(100%-30px); line-height: 20px; height: 20px; text-align: center; margin-top: 20px; cursor: pointer;">Book Now!</div>
+    </div>
 
     <!-- You <span style="font-weight: 600;">can</span> leave on a flight <span style="color: white; font-weight: 600;">tomorrow</span> to <span style="font-weight: 600; color: #DAA520;">Mexico</span> for <span style="font-weight: 600; color: white;">$480.32</span> US dollars! -->
     <div id="price" style="color: rgb(200, 200, 200); width: 100%; position: absolute; bottom: 0px; text-align: center; font-family: 'Helvetica Neue'; font-weight: 300; font-size: 20px; background-color: black; line-height: 50px;">Click on a country to try flying there.</div>
@@ -130,7 +138,7 @@
       google.charts.setOnLoadCallback(drawRegionsMap);
 
       function drawRegionsMap() {
-        var data = google.visualization.arrayToDataTable([
+        data = google.visualization.arrayToDataTable([
           
           ['Country', 'Data'], ['United States', '100']
 
@@ -149,6 +157,28 @@
 
         google.visualization.events.addListener(chart, 'regionClick', selectHandler);
         
+        // google.visualization.events.addListener(chart, 'regionClick', function() {
+        //   var selection = chart.getSelection();
+        //   console.log(selection);
+        //   if(selection.length > 0) {
+        //     var view = new google.visualization.DataView(data);
+        //     view.setColumns([0, {
+        //         type: 'number',
+        //         label: data.getColumnLabel(1),
+        //         calc: function (dt, row) {
+        //             return (selection[0].row == row) ? 100 : 1;
+        //         }
+        //     }]);
+        //     chart.draw(view, options);
+        //   } else {
+        //     chart.draw(data, options);
+        //   }
+        // });
+
+        function getTime(time) {
+          return time.substring(time.indexOf("T") + 1);
+        }
+
         function selectHandler(e) {
           var xhr = new XMLHttpRequest();
           xhr.open('get', 'https://restcountries.eu/rest/v1/name/' + e.region + '?fullText=true');
@@ -156,12 +186,16 @@
             if(xhr.readyState == 4 && xhr.status == 200) {
               var capitalName = JSON.parse(xhr.responseText)[0]["capital"];
               var xhr2 = new XMLHttpRequest();
+              document.getElementById("fInfoContainer").style.display = "none";
               xhr2.open('get', 'data.json');
               xhr2.onreadystatechange = function() {
                 if(xhr2.readyState == 4 && xhr2.status == 200) {
                   var cities = JSON.parse(xhr2.responseText)['response'];
+                  var cityFound = false;
                   for(var i = 0; i < cities.length; i++) {
                     if(cities[i]['name'] == capitalName) {
+                      cityFound = true;
+                      document.getElementById("price").innerHTML = "Checking flight avaliability...";
                       var cityCode = cities[i]['code'];
 
                       var currentdate = new Date();
@@ -172,11 +206,29 @@
 
                       var datetime = currentdate.getFullYear() + "-" + month + "-" + curDate; 
                       var xhr3 = new XMLHttpRequest();
-                      xhr3.open('get', 'https://api.sandbox.amadeus.com/v1.2/flights/extensive-search?apikey=uPGr2V8ikmN7xXWxu5bmNxTE4F9W4Fgn&origin=SFO&destination=' + cityCode + '&one-way=true&departure_date=' + datetime, true);
+                      xhr3.open('get', 'https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey=uPGr2V8ikmN7xXWxu5bmNxTE4F9W4Fgn&origin=SFO&destination=' + cityCode + '&departure_date=' + datetime + '&number_of_results=1', true);
                       xhr3.onreadystatechange=function() {
                           if (xhr3.readyState==4 && xhr3.status==200) {
-                            var price = JSON.parse(xhr3.responseText)['results'][0]['price'];
+                            var itenerary = JSON.parse(xhr3.responseText)['results'][0]['itineraries'][0]['outbound']['flights'];
+                            console.log(itenerary);
+                            var price = JSON.parse(xhr3.responseText)['results'][0]['fare']['total_price'];
+                            //var price = JSON.parse(xhr3.responseText)['results'][0]['price'];
                             document.getElementById("price").innerHTML = "You <span style=\"font-weight: 600;\">can</span> leave on a flight <span style=\"color: white; font-weight: 600;\">tomorrow</span> to <span style=\"font-weight: 600; color: #DAA520;\">" + e.region + "</span> for <span style=\"font-weight: 600; color: white;\">$" + price + "</span> US dollars!";
+                          
+
+                            document.getElementById("pname").innerHTML = "Price: $" + price;
+                            document.getElementById("cname").innerHTML = e.region;
+                            document.getElementById("fInfoContainer").style.display = "block";
+
+                            console.log(itenerary[0]['departs_at']);
+                            document.getElementById("firstFlight").innerHTML = itenerary[0]['origin']['airport'] + " ⟶ " + itenerary[0]['destination']['airport'] + " " + getTime(itenerary[0]['departs_at']);
+                            document.getElementById("additionalFlights").innerHTML = "";
+                            var additionalFlights = "";
+                            for(var i = 1; i < itenerary.length; i++) {
+                              additionalFlights += ('<div style="font-size: 14px; color: white; font-family: \'Helvetica Neue\'; margin-top: 10px;">' + itenerary[i]['origin']['airport'] + ' ⟶ ' + itenerary[i]['destination']['airport'] + ' ' + getTime(itenerary[i]['departs_at']) + '</div>');
+                            }
+                            document.getElementById("additionalFlights").innerHTML = additionalFlights;
+
                           } else if(xhr3.readyState == 4) {
                             document.getElementById("price").innerHTML = "No flights found, try another country :(";
                           }
@@ -185,6 +237,9 @@
 
                       break;
                     }
+                  }
+                  if(!cityFound) { // capital city could not be found
+                    document.getElementById("price").innerHTML = "No flights found, try another country :(";
                   }
                 } else if(xhr2.readyState == 4) {
                     document.getElementById("price").innerHTML = "No flights found, try another country :(";
