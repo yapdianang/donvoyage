@@ -1,275 +1,244 @@
-<html>
-  <head>
-    <title>Don Voyage</title>
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <style>
-    * { margin: 0; padding: 0; } .checkbox { cursor: pointer; }
+<!DOCTYPE html>
+<html lang="en">
 
-    @font-face {
-        font-family: 'Montserrat';
-        src: url(Montserrat-Black.ttf);
-        font-weight: 600;
-    }
+<head>
 
-    @font-face {
-        font-family: 'Montserrat';
-        src: url(Montserrat-Regular.ttf);
-        font-weight: 300;
-    }
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-    </style>
-  </head>
-  <body style="background-color: #0052A5;">
+    <title>New Age - Start Bootstrap Theme</title>
 
-    <div id="geochart-colors" style="width: 800px; height: 600px; position: absolute; left: 50%; top: 50px; margin-left: -400px;"></div>
-    <script>
+    <!-- Bootstrap Core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    window.onload = function() {
-      document.body.onkeyup = function(e) {
-        var charCode = (typeof e.which == "number") ? e.which : e.keyCode
-        if(charCode == 38 || charCode == 40) nextFilter();
-      }
-    }
+    <!-- Custom Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet">
 
-      var options, data; // global variable
-      var btnText = ["red", "white"];
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="vendor/simple-line-icons/css/simple-line-icons.css">
+    <link rel="stylesheet" href="vendor/device-mockups/device-mockups.min.css">
 
-      var label_options = [['Country', 'Refugee Ban'], ['Country', '# Businesses'], ['Country', 'Anger'], ['Country', 'Angry Tweets'], ['Country', 'Data']];
+    <!-- Theme CSS -->
+    <link href="css/new-age.min.css" rel="stylesheet">
 
-      var country_options = [ [['Libya', 16], ['Sudan', 16], ['Syria', 16], ['Iraq', 16], ['Iran', 16], ['Yemen', 16], ['Somalia', 16]], [['India', 16], ['Indonesia', 16], ['Canada', 14], ['UAE', 12], ['United Kingdom', 10], ['China', 9], ['Brazil', 8], ['Panama', 8], ['Saudi Arabia', 8], ['French West Indies', 8], ['Azerbaijan', 6], ['St. Vincent and the Grenadines', 4], ['Ireland', 4], ['Israel', 4], ['Qatar', 4], ['Dominican Republic', 3], ['Egypt', 2], ['Georgia', 2], ['Mexico', 2], ['Philippines', 2], ['South Africa', 2], ['Turkey', 2], ['Uruguay', 2], ['Bermuda', 1], ['Argentina', 1]], [['Pakistan',15.0],['Czech Republic',15.0],['Mexico',8.0],['Egypt',8.0],['India',13.0],['North Korea',9.0],['Tanzania',9.0],['Greece',1.0],['Japan',7.0],['Afghanistan',14.0],['Saudi Arabia',16.0],['Kuwait',6.0],['France',7.0],['South Korea',16.0],['Israel',8.0],['Iran',8.0],['Cuba',15.0],['Germany',11.0],['Iraq',9.0],['Kenya',9.0],['Ukraine',7.0],['Libya',11.0],['Denmark',1.0],['Poland',15.0],['Vietnam',1.0],['Mali',16.0],['Jordan',0.0],['China',3.0],['Russia',9.0]], [['Pakistan',16.0],['Samoa',2.0],['Myanmar',1.0],['Mexico',5.0],['India',5.0],['North Korea',8.0],['Japan',5.0],['Taiwan',8.0],['New Zealand',16.0],['Canada',0.0],['Saudi Arabia',16.0],['Italy',1.0],['Bangladesh',16.0],['Mauritania',12.0],['Sudan',0.0],['France',16.0],['Somalia',0.0],['Ireland',0.0],['Venezuela',6.0],['Turkey',16.0],['Israel',10.0],['Australia',11.0],['Iran',9.0],['Cuba',6.0],['China',11.0],['Haiti',16.0],['Iraq',14.0],['Ukraine',7.0],['Georgia',0.0],['Libya',13.0],['Oman',7.0],['Philippines',1.0],['Brazil',16.0],['Morocco',7.0],['Vietnam',7.0],['Mali',11.0],['Switzerland',16.0],['Germany',12.0],['Yemen',0.0],['Russia',12.0],['Jersey',0.0]] ];
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-      function checkSelected(id) {
-        return document.getElementById("opt" + id).style.color == btnText[0];
-      }
+</head>
 
-      function nextFilter() {
-        if(checkSelected(1) && !checkSelected(2) && !checkSelected(3) && !checkSelected(4)) {
-          isSelected(document.getElementById("opt1"));
-          isSelected(document.getElementById("opt3"));
-        }
-        else if(checkSelected(2) && !checkSelected(1) && !checkSelected(3) && !checkSelected(4)) {
-          isSelected(document.getElementById("opt2"));
-          isSelected(document.getElementById("opt4"));
-        }
-        else if(checkSelected(3) && !checkSelected(2) && !checkSelected(1) && !checkSelected(4)) {
-          isSelected(document.getElementById("opt3"));
-          isSelected(document.getElementById("opt2"));
-        }
-        else if(checkSelected(4) && !checkSelected(2) && !checkSelected(3) && !checkSelected(1)) {
-          isSelected(document.getElementById("opt4"));
-          isSelected(document.getElementById("opt1"));
-        }
-        else {
-          simpleUnselect(document.getElementById("opt1"));
-          simpleUnselect(document.getElementById("opt2"));
-          simpleUnselect(document.getElementById("opt3"));
-          simpleUnselect(document.getElementById("opt4"));
-          isSelected(document.getElementById("opt1"));
-        }
-      }
+<body id="page-top">
 
-      function simpleUnselect(btn) {
-          btn.style.color = btnText[1];
-          btn.style.fontWeight = "300"; // regular
-      }
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">Don Voyage</a>
+            </div>
 
-      function simpleSelect(btn) {
-          btn.style.color = btnText[0];
-          btn.style.fontWeight = "600"; // bold
-      }
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a class="page-scroll" href="#download">How It Works</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#features">Features</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
 
-      function simpleToggle(btn) {
-        if(btn.style.color == btnText[0]) {
-          simpleUnselect(btn);
-        } else {
-          simpleSelect(btn); 
-        }
-      }
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="header-content">
+                        <div class="header-content-inner">
+                            <h1>Bon Voyage. Don's' Voyage. Don't Voyage.</h1>
+                            <a href="#download" class="btn btn-outline btn-xl page-scroll">Check Out Don Voyage</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <div class="device-container">
+                        <div class="device-mockup iphone6_plus portrait white">
+                            <div class="device">
+                                <div class="screen">
+                                    <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
+                                    <img src="img/airplane.png" class="img-responsive" alt="">
+                                </div>
+                                <div class="button">
+                                    <!-- You can hook the "home button" to some JavaScript events or just remove it -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-      function isSelected(btn) {
-        simpleToggle(btn);
-        
-        var countries = [];
-        for(var i = 1; i <= 4; i++) {
-          if(checkSelected(i)) {
-            countries = countries.concat(country_options[i-1]);
-          }
-        }
+    <section id="download" class="download bg-primary text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <h2 class="section-heading">How It Works</h2>
+                    <p>November 8, 2016. Following a contentious election, Canada's immigration site crashed, while the demand for travel abroad peaked in 2016.'
+                    <br>
+                    <img src="img/move.jpg">
+                    <p>We facilitate your travel plans using machine learning to analyze Trump's Tweets and foreign policies, and filter countries based on Trump's sentiments for your safe travels. </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        var labels = [];
-        if(checkSelected(1) && !checkSelected(2) && !checkSelected(3) && !checkSelected(4)) labels = [label_options[0]];
-        else if(checkSelected(2) && !checkSelected(1) && !checkSelected(3) && !checkSelected(4)) labels = [label_options[1]];
-        else if(checkSelected(3) && !checkSelected(2) && !checkSelected(1) && !checkSelected(4)) labels = [label_options[2]];
-        else if(checkSelected(4) && !checkSelected(2) && !checkSelected(3) && !checkSelected(1)) labels = [label_options[3]];
-        else labels = [label_options[4]];
+    <section id="features" class="features">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="section-heading">
+                        <h2>Features</h2>
+                        <p class="text-muted">Check out what you can do with Don Voyage!</p>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="device-container">
+                        <div class="device-mockup iphone6_plus portrait white">
+                            <div class="device">
+                                <div class="screen">
+                                    <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
+                                    <img src="img/capture.jpg" class="img-responsive" alt=""> </div>
+                                <div class="button">
+                                    <!-- You can hook the "home button" to some JavaScript events or just remove it -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="feature-item">
+                                    <i class="icon-screen-smartphone text-primary"></i>
+                                    <h3>User Friendly</h3>
+                                    <p class="text-muted">Hover over any country to check the ratings, and click to check flight availability!</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item">
+                                    <i class="icon-plane text-primary"></i>
+                                    <h3>Flexible Use</h3>
+                                    <p class="text-muted">Capture your flight details!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item">
+                                    <i class="icon-list text-primary"></i>
+                                    <h3>Personalized</h3>
+                                    <p class="text-muted">Check multiple factors based on your liking to weight your decisions!</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item">
+                                    <i class="icon-heart text-primary"></i>
+                                    <h3>Free to Use</h3>
+                                    <p class="text-muted">Don Voyage is always free to use for the love of everyone, as love Trumps hate!</p>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
 
-        labels = labels.concat([['United States', 100]]);
-        labels = labels.concat(countries);
+    <section class="cta">
+        <div class="cta-content">
+            <div class="container">
+                <h2>Make travelling<br>great again.</h2>
+                <a href="donvoyage.html" class="btn btn-outline btn-xl page-scroll">Let's Get Started!</a>
+            </div>
+        </div>
+        <div class="overlay"></div>
+    </section>
 
-        data = google.visualization.arrayToDataTable(labels);
-        chart.draw(data, options);
+    <section id="contact" class="contact bg-primary">
+        <div class="container">
+            <h2>We <i class="fa fa-heart"></i> new friends!</h2>
+            <ul class="list-inline list-social">
+                <li class="social-twitter">
+                    <a href="#"><i class="fa fa-twitter"></i></a>
+                </li>
+                <li class="social-facebook">
+                    <a href="#"><i class="fa fa-facebook"></i></a>
+                </li>
+                <li class="social-google-plus">
+                    <a href="#"><i class="fa fa-google-plus"></i></a>
+                </li>
+            </ul>
+        </div>
+        <br>
+        <p>Find us on LinkedIn: </p>
+        <a href="https://www.linkedin.com/in/jack-collison-89a0ba129" style="color: white;">Jack Collison</a> |
+        <a href="https://www.linkedin.com/in/vineet-kosaraju-0782348a" style="color: white;">Vineet Kosaraju</a> | 
+        <a href="https://www.linkedin.com/in/dianangyap" style="color: white;">Yap Dian Ang</a> |
+        <a href="https://www.linkedin.com/in/zaid-nabulsi-089b48123" style="color: white;">Zaid Nabulsi</a>
+"
+    </section>
 
-      }
-    </script>
+    <footer>
+        <div class="container">
+            <p>&copy; 2017 Frosty. All Rights Reserved.</p>
+            <ul class="list-inline">
+                <li>
+                    <a href="#">Privacy</a>
+                </li>
+                <li>
+                    <a href="#">Terms</a>
+                </li>
+                <li>
+                    <a href="#">FAQ</a>
+                </li>
+            </ul>
+        </div>
+    </footer>
 
-    <div id='opt1' style="color: white; font-weight: 300; font-family: 'Helvetica Neue'; position: absolute; left: 75px; top: 50px;" class="checkbox" onclick="isSelected(this)">Banned Countries</div>
-    <div id='opt2' style="color: white; font-weight: 300; font-family: 'Helvetica Neue'; position: absolute; left: 75px; top: 100px;" class="checkbox" onclick="isSelected(this)">Business Involvement</div>
-    <div id='opt3' style="color: white; font-weight: 300; font-family: 'Helvetica Neue'; position: absolute; left: 75px; top: 75px;" class="checkbox" onclick="isSelected(this)">Foreign Policy</div>
-    <div id='opt4' style="color: white; font-weight: 300; font-family: 'Helvetica Neue'; position: absolute; left: 75px; top: 125px;" class="checkbox" onclick="isSelected(this)">Tweets</div>
+    <!-- jQuery -->
+    <script src="vendor/jquery/jquery.min.js"></script>
 
-    <img src="plane.png" width="100" style="position: absolute; left: 50%; top: 25px; margin-left: -250px;"/>
-    <img src="don.png" width="50" style="position: absolute; left: 50%; top: 40px; margin-left: -120px;"/>
-    <div style="color: white; text-transform: uppercase; width: 600px; position: absolute; left: 50%; top: 25px; margin-left: -300px; text-align: center; font-family: 'Montserrat'; font-size: 40px;">Don' Voyage</div>
-    
-    <div id="fInfoContainer" style="display: none; position: absolute; width: 160px; padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px; background-color: #4286F4; top: 200px; left: 50px;">
-      <div style="color: white; font-family: 'Montserrat'; text-align: left; width: 100%; border-bottom: 1px solid white;">Flight Information</div>
-      <div style="font-size: 15px; color: white; font-family: 'Helvetica Neue'; margin-top: 10px;">Country: <span style="color: #DAA520;" id="cname"></span></div>
-      <div style="font-size: 15px; color: rgb(180, 180, 180); font-family: 'Helvetica Neue'; margin-top: 10px;" id="pname">Price: </div>
-      <div style="font-size: 14px; color: white; font-family: 'Helvetica Neue'; margin-top: 20px;" id="firstFlight"></div>
-      <div id="additionalFlights"></div>
-      <div style="font-size: 14px; color: white; background-color: #0052A5; font-family: 'Helvetica Neue'; padding: 15px; width: calc(100%-30px); line-height: 20px; height: 20px; text-align: center; margin-top: 20px; cursor: pointer;">Book Now!</div>
-    </div>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
-    <!-- You <span style="font-weight: 600;">can</span> leave on a flight <span style="color: white; font-weight: 600;">tomorrow</span> to <span style="font-weight: 600; color: #DAA520;">Mexico</span> for <span style="font-weight: 600; color: white;">$480.32</span> US dollars! -->
-    <div id="price" style="color: rgb(200, 200, 200); width: 100%; position: absolute; bottom: 0px; text-align: center; font-family: 'Helvetica Neue'; font-weight: 300; font-size: 20px; background-color: black; line-height: 50px;">Click on a country to try flying there.</div>
-  
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
+    <!-- Plugin JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
 
-      google.charts.load('upcoming', {'packages':['geochart']});
-      google.charts.setOnLoadCallback(drawRegionsMap);
+    <!-- Theme JavaScript -->
+    <script src="js/new-age.min.js"></script>
 
-      function drawRegionsMap() {
-        data = google.visualization.arrayToDataTable([
-          
-          ['Country', 'Data'], ['United States', '100']
+</body>
 
-        ]);
-
-        options = {
-          colorAxis: {values: [0, 16, 100], colors: ['#F0D6DB', '#E0162B', 'rgb(0, 200, 0)']},
-          backgroundColor: '#0052A5',
-          datalessRegionColor: 'white',
-          defaultColor: '#f5f5f5',
-          legend: 'false'
-        };
-
-        chart = new google.visualization.GeoChart(document.getElementById('geochart-colors'));
-        chart.draw(data, options);
-
-        google.visualization.events.addListener(chart, 'regionClick', selectHandler);
-        
-        // google.visualization.events.addListener(chart, 'regionClick', function() {
-        //   var selection = chart.getSelection();
-        //   console.log(selection);
-        //   if(selection.length > 0) {
-        //     var view = new google.visualization.DataView(data);
-        //     view.setColumns([0, {
-        //         type: 'number',
-        //         label: data.getColumnLabel(1),
-        //         calc: function (dt, row) {
-        //             return (selection[0].row == row) ? 100 : 1;
-        //         }
-        //     }]);
-        //     chart.draw(view, options);
-        //   } else {
-        //     chart.draw(data, options);
-        //   }
-        // });
-
-        function getTime(time) {
-          return time.substring(time.indexOf("T") + 1);
-        }
-
-        function selectHandler(e) {
-          var xhr = new XMLHttpRequest();
-          xhr.open('get', 'https://restcountries.eu/rest/v1/name/' + e.region + '?fullText=true');
-          xhr.onreadystatechange = function() {
-            if(xhr.readyState == 4 && xhr.status == 200) {
-              var capitalName = JSON.parse(xhr.responseText)[0]["capital"];
-              var xhr2 = new XMLHttpRequest();
-              document.getElementById("fInfoContainer").style.display = "none";
-              xhr2.open('get', 'data.json');
-              xhr2.onreadystatechange = function() {
-                if(xhr2.readyState == 4 && xhr2.status == 200) {
-                  var cities = JSON.parse(xhr2.responseText)['response'];
-                  var cityFound = false;
-                  for(var i = 0; i < cities.length; i++) {
-                    if(cities[i]['name'] == capitalName) {
-                      cityFound = true;
-                      document.getElementById("price").innerHTML = "Checking flight avaliability...";
-                      var cityCode = cities[i]['code'];
-
-                      var currentdate = new Date();
-                      var month = (currentdate.getMonth() + 1);
-                      if(month < 10) month = "0" + month;
-                      var curDate = currentdate.getDate() + 1;
-                      if(curDate < 10) curDate = "0" + curDate;
-
-                      var datetime = currentdate.getFullYear() + "-" + month + "-" + curDate; 
-                      var xhr3 = new XMLHttpRequest();
-                      xhr3.open('get', 'https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey=uPGr2V8ikmN7xXWxu5bmNxTE4F9W4Fgn&origin=SFO&destination=' + cityCode + '&departure_date=' + datetime + '&number_of_results=1', true);
-                      xhr3.onreadystatechange=function() {
-                          if (xhr3.readyState==4 && xhr3.status==200) {
-                            var itenerary = JSON.parse(xhr3.responseText)['results'][0]['itineraries'][0]['outbound']['flights'];
-                            console.log(itenerary);
-                            var price = JSON.parse(xhr3.responseText)['results'][0]['fare']['total_price'];
-                            //var price = JSON.parse(xhr3.responseText)['results'][0]['price'];
-                            document.getElementById("price").innerHTML = "You <span style=\"font-weight: 600;\">can</span> leave on a flight <span style=\"color: white; font-weight: 600;\">tomorrow</span> to <span style=\"font-weight: 600; color: #DAA520;\">" + e.region + "</span> for <span style=\"font-weight: 600; color: white;\">$" + price + "</span> US dollars!";
-                          
-
-                            document.getElementById("pname").innerHTML = "Price: $" + price;
-                            document.getElementById("cname").innerHTML = e.region;
-                            document.getElementById("fInfoContainer").style.display = "block";
-
-                            console.log(itenerary[0]['departs_at']);
-                            document.getElementById("firstFlight").innerHTML = itenerary[0]['origin']['airport'] + " ⟶ " + itenerary[0]['destination']['airport'] + " " + getTime(itenerary[0]['departs_at']);
-                            document.getElementById("additionalFlights").innerHTML = "";
-                            var additionalFlights = "";
-                            for(var i = 1; i < itenerary.length; i++) {
-                              additionalFlights += ('<div style="font-size: 14px; color: white; font-family: \'Helvetica Neue\'; margin-top: 10px;">' + itenerary[i]['origin']['airport'] + ' ⟶ ' + itenerary[i]['destination']['airport'] + ' ' + getTime(itenerary[i]['departs_at']) + '</div>');
-                            }
-                            document.getElementById("additionalFlights").innerHTML = additionalFlights;
-
-                          } else if(xhr3.readyState == 4) {
-                            document.getElementById("price").innerHTML = "No flights found, try another country :(";
-                          }
-                      }
-                      xhr3.send();
-
-                      break;
-                    }
-                  }
-                  if(!cityFound) { // capital city could not be found
-                    document.getElementById("price").innerHTML = "No flights found, try another country :(";
-                  }
-                } else if(xhr2.readyState == 4) {
-                    document.getElementById("price").innerHTML = "No flights found, try another country :(";
-                }
-              }
-              xhr2.send();
-            } else if(xhr.readyState == 4) {
-                document.getElementById("price").innerHTML = "No flights found, try another country :(";
-            }
-          }
-          xhr.send();
-        }
-
-
-        isSelected(document.getElementById("opt1"));
-      }
-
-    </script>
-    <script src="doppler.js"></script>
-    <script>
-    // FOR GLITCHY "HANDS-FREE" SCROLLING (VOICE RECOGNITION LMAO)
-      // window.addEventListener('load', function() {
-      //   window.doppler.init(function(bandwidth) {
-      //     var diff = bandwidth.left - bandwidth.right;
-      //     if(diff > 0.9999999) nextFilter();
-      //   });
-      // });
-    </script>
-  </body>
 </html>
