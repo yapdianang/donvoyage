@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('upcoming', {'packages':['geochart']});
+      google.charts.setOnLoadCallback(drawRegionsMap);
+
+      function drawRegionsMap() {
+        var data = google.visualization.arrayToDataTable([
+          ['Country', 'Value'], ["Bhutan",1], ["Liechtenstein",1], ["Maldives",1], ["Sudan",1], ["Zimbabwe",1], ["Mauritania",1], ["Mozambique",1], ["Swaziland",1], ["Tanzania",1], ["Iraq",1], ["Guyana",1], ["Namibia",1], ["Senegal",1], ["Turkmenistan",1], ["Afghanistan",1], ["Andorra",1], ["Fiji",1], ["Uzbekistan",1], ["Cameroon",1], ["Cuba",1], ["Faroe Islands",1], ["El Salvador",1], ["Caribbean",1], ["Ethiopia",1], ["Mongolia",1], ["Puerto Rico",1], ["Samoa",1], ["Myanmar",1], ["Nicaragua",1], ["Tajikistan",1], ["Barbados",1], ["Dominican Republic",1], ["Libya",1], ["Panama",1], ["Bahrain",1], ["Benin",1], ["Bolivia",1], ["Ghana",1], ["Montenegro",1], ["Syria",1], ["Ecuador",1], ["Honduras",1], ["Tunisia",1], ["Botswana",1], ["Cyprus",1], ["Algeria",1], ["Bahamas",1], ["New Caledonia",1], ["Republic of the Congo",1], ["Uganda",1], ["Yemen",1], ["Zambia",1], ["Antarctica",2], ["Paraguay",2], ["Jamaica",2], ["Bosnia and Herzegovina",2], ["Vietnam",2], ["Luxembourg",2], ["Kenya",2], ["Palestinian",2], ["Nepala",2], ["Niger",2], ["Kuwait",2], ["Hawaii",2], ["Cambodia",2], ["Uruguay",2], ["Kyrgyzstan",2], ["Saudi Arabia",2], ["Indonesia",2], ["Azerbaijan",2], ["United Arab Emirates",2], ["Mauritius",2], ["Alberta",2], ["Morocco",2], ["Albania",3], ["South Korea",3], ["Kazakhstan",3], ["Macedonia",3], ["Venezuela",3], ["Taiwan",3], ["Qatar",3], ["Jordan",3], ["Iceland",3], ["Guatemala",3], ["Costa Rica",3], ["San Marino",3], ["Colombia",4], ["Moldova",4], ["Armenia",4], ["Egypt",4], ["Nepal",4], ["Malta",4], ["Lebanon",5], ["Malaysia",5], ["Serbia",5], ["Peru",5], ["Trinidad and Tobago",5], ["Lithuania",5], ["Estonia",6], ["Georgia",6], ["Iran",7], ["Chile",7], ["Latvia",7], ["Thailand",7], ["Slovenia",8], ["Mexico",8], ["Belarus",8], ["Slovakia",9], ["Sri Lanka",9], ["Croatia",9], ["Philippines",9], ["Bangladesh",10], ["Turkey",10], ["Italy",14], ["South Africa",14], ["Hungary",15], ["Pakistan",16], ["Portugal",16], ["Ukraine",19], ["Greece",19], ["Argentina",19], ["Singapore",20], ["Bulgaria",20], ["Japan",24], ["Czech Republic ",26], ["China",27], ["Oman",31], ["Brazil",32], ["Finland",32], ["Norway",34], ["Austria",35], ["Denmark",40], ["Belgium",41], ["New Zealand",42], ["Spain",43], ["Switzerland",57], ["Russia",62], ["Poland",65], ["Palestine",73], ["Sweden",91], ["Netherlands",118], ["France",119], ["Australia",157], ["Canada",204], ["India",234], ["Germany",308], ["United Kingdom",620], ["United States",928], ["Unknown",1137]
+        ]);
+
+        var options = {
+          colorAxis: {values: [0, 500, 1000], colors: ['red', 'grey','green'],},
+          backgroundColor: '#81d4fa',
+          datalessRegionColor: '#f8bbd0',
+          defaultColor: '#f5f5f5',
+		  
+        };
+
+        var chart = new google.visualization.GeoChart(document.getElementById('geochart-colors'));
+        chart.draw(data, options);
+      };
+    </script>
+  </head>
+  <body bgcolor="#81d4fa">
+    <div id="geochart-colors" style="width: 1250px; height: 700px;"></div>
+  </body>
+</html>
