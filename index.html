@@ -20,8 +20,15 @@
   <body style="background-color: #0052A5;">
 
     <div id="geochart-colors" style="width: 800px; height: 600px; position: absolute; left: 50%; top: 50px; margin-left: -400px;"></div>
-
     <script>
+
+    window.onload = function() {
+      document.body.onkeyup = function(e) {
+        var charCode = (typeof e.which == "number") ? e.which : e.keyCode
+        if(charCode == 38 || charCode == 40) nextFilter();
+      }
+    }
+
       var options; // global variable
       var btnText = ["red", "white"];
 
@@ -33,14 +40,52 @@
         return document.getElementById("opt" + id).style.color == btnText[0];
       }
 
-      function isSelected(btn) {
-        if(btn.style.color == btnText[0]) {
+      function nextFilter() {
+        if(checkSelected(1) && !checkSelected(2) && !checkSelected(3) && !checkSelected(4)) {
+          isSelected(document.getElementById("opt1"));
+          isSelected(document.getElementById("opt3"));
+        }
+        else if(checkSelected(2) && !checkSelected(1) && !checkSelected(3) && !checkSelected(4)) {
+          isSelected(document.getElementById("opt2"));
+          isSelected(document.getElementById("opt4"));
+        }
+        else if(checkSelected(3) && !checkSelected(2) && !checkSelected(1) && !checkSelected(4)) {
+          isSelected(document.getElementById("opt3"));
+          isSelected(document.getElementById("opt2"));
+        }
+        else if(checkSelected(4) && !checkSelected(2) && !checkSelected(3) && !checkSelected(1)) {
+          isSelected(document.getElementById("opt4"));
+          isSelected(document.getElementById("opt1"));
+        }
+        else {
+          simpleUnselect(document.getElementById("opt1"));
+          simpleUnselect(document.getElementById("opt2"));
+          simpleUnselect(document.getElementById("opt3"));
+          simpleUnselect(document.getElementById("opt4"));
+          isSelected(document.getElementById("opt1"));
+        }
+      }
+
+      function simpleUnselect(btn) {
           btn.style.color = btnText[1];
           btn.style.fontWeight = "300"; // regular
-        } else {
+      }
+
+      function simpleSelect(btn) {
           btn.style.color = btnText[0];
           btn.style.fontWeight = "600"; // bold
+      }
+
+      function simpleToggle(btn) {
+        if(btn.style.color == btnText[0]) {
+          simpleUnselect(btn);
+        } else {
+          simpleSelect(btn); 
         }
+      }
+
+      function isSelected(btn) {
+        simpleToggle(btn);
         
         var countries = [];
         for(var i = 1; i <= 4; i++) {
@@ -158,6 +203,15 @@
       }
 
     </script>
-
+    <script src="doppler.js"></script>
+    <script>
+    // FOR GLITCHY "HANDS-FREE" SCROLLING (VOICE RECOGNITION LMAO)
+      // window.addEventListener('load', function() {
+      //   window.doppler.init(function(bandwidth) {
+      //     var diff = bandwidth.left - bandwidth.right;
+      //     if(diff > 0.9999999) nextFilter();
+      //   });
+      // });
+    </script>
   </body>
 </html>
